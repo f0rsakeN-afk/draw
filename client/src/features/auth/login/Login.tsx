@@ -11,6 +11,7 @@ import {
   loginSchema,
   type loginFormData,
 } from "@/schema/auth/login/login.schema";
+import { LogoImage } from "@/utils/ImageExports";
 
 const Login: React.FC = () => {
   const {
@@ -30,9 +31,11 @@ const Login: React.FC = () => {
       <Card className="w-full max-w-md shadow-xl rounded-2xl border-none">
         <CardContent className="p-8">
           <div className="flex justify-center mb-6">
-            <div className="w-14 h-14 bg-primary rounded-full flex items-center justify-center text-white font-bold text-xl">
-              🔒
-            </div>
+            <img
+              src={LogoImage}
+              alt="logo image"
+              className="h-20 dark:invert"
+            />
           </div>
 
           <h2 className="text-2xl font-bold text-center text-foreground mb-2">
@@ -95,6 +98,15 @@ const Login: React.FC = () => {
               className="text-primary font-medium hover:underline"
             >
               Sign up
+            </Link>
+          </p>
+          <p className="text-center text-sm text-muted-foreground mt-1">
+            Forgot your password?{" "}
+            <Link
+              to="/forgotpassword"
+              className="text-primary font-medium hover:underline"
+            >
+              Forgot password
             </Link>
           </p>
         </CardContent>

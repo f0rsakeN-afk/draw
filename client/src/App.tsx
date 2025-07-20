@@ -8,6 +8,15 @@ const PageNotFound = lazy(() => import("./features/pagenotfound/index"));
 const Home = lazy(() => import("./features/home/index"));
 const Login = lazy(() => import("./features/auth/login/Login"));
 const Signup = lazy(() => import("./features/auth/signup/Signup"));
+const ForgotPassword = lazy(
+  () => import("./features/auth/forgotpassword/ForgotPassword")
+);
+const ResetPassword = lazy(
+  () => import("./features/auth/resetPassword/ResetPassword")
+);
+const VerifyEmail = lazy(
+  () => import("./features/auth/emailVerification/VerifyEmail")
+);
 
 const App = () => {
   const queryClient = new QueryClient();
@@ -21,8 +30,11 @@ const App = () => {
               <Route index element={<Home />} />
             </Route>
 
-            <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/verifyemail" element={<VerifyEmail />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/resetpassword" element={<ResetPassword />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </QueryClientProvider>

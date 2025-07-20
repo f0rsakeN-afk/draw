@@ -1,12 +1,7 @@
 import React from "react";
-import Loader from "@/components/shared/Loader";
 
 const Home: React.FC = () => {
-  return (
-    <div>
-      <Loader />
-    </div>
-  );
+  return <div className="h-screen">csd</div>;
 };
 
 export default Home;

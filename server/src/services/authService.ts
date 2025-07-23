@@ -8,8 +8,7 @@ import { generateToken } from "../utils/jwt";
 export const registerUser = async (
   name: string,
   email: string,
-  password: string,
-  passwordConfirm: string
+  password: string
 ) => {
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) throw new AppError("Email already registered", 400);

@@ -23,10 +23,14 @@ model User {
   id                        String       @id @default(uuid())
   name                      String
   email                     String       @unique
+  otp                       String?
+  otpExpires                DateTime?
+  isVerified                Boolean      @default(false)
   password                  String
   passwordResetToken        String?
   passwordResetTokenExpires DateTime?
   createdAt                 DateTime     @default(now())
+  updatedAt                 DateTime     @updatedAt
   videos                    Video[]
   watchLater                WatchLater[]
   playLists                 PlayList[]

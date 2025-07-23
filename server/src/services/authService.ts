@@ -24,4 +24,24 @@ export const registerUser = async (
   await sendEmail(email, "Verify your email", `Your OTP is ${otp}`);
 };
 
+export const verifyUserOTP = async (email: string, otp: string) => {
+  const user = await prisma.user.findUnique({ where: { email } });
 
+  if (
+    !user ||
+    user.otp !== otp ||
+    !user.otpExpires ||
+    new Date() > user.otpExpires
+  ) {
+    throw new AppError("Invalid or expired OTP", 400);
+  }
+
+  await prisma.user.update({
+    where: { email },
+    data: {
+      isVerified: true,
+      otp: null,
+      otpExpires: null,
+    },
+  });
+};

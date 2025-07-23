@@ -2,7 +2,8 @@ import prisma from "../lib/prisma";
 import { AppError } from "../utils/AppError";
 import { sendEmail } from "../utils/email";
 import { generateOTP } from "../utils/generateOTP";
-import { hashPassword } from "../utils/hash";
+import { comparePassword, hashPassword } from "../utils/hash";
+import { generateToken } from "../utils/jwt";
 
 export const registerUser = async (
   name: string,
@@ -44,4 +45,17 @@ export const verifyUserOTP = async (email: string, otp: string) => {
       otpExpires: null,
     },
   });
+};
+
+export const loginUser = async (email: string, password: string) => {
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) throw new AppError("Invalid credentials", 400);
+
+  if (!user.isVerified) throw new AppError("Email not verified", 403);
+
+  const match = await comparePassword(password, user.password);
+  if (!match) throw new AppError("Invalid credentials", 400);
+
+  const token = generateToken(user.id);
+  return token;
 };

@@ -25,6 +25,7 @@ model User {
   email                     String       @unique
   otp                       String?
   otpExpires                DateTime?
+  otpSentAt                 DateTime?    @default(now())
   isVerified                Boolean      @default(false)
   password                  String
   passwordResetToken        String?

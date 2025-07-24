@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod";
 
 export const registerSchema = z
   .object({
@@ -14,12 +14,16 @@ export const registerSchema = z
 
 export const loginSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(1, "Password should contain at least 1 character"),
+  password: z.string().min(6, "Password should contain at least 6 character"),
 });
 
 export const verifyOTPSchema = z.object({
   email: z.string().email(),
   otp: z.string().length(6),
+});
+
+export const resendOTPSchema = z.object({
+  email: z.string().email(),
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>;

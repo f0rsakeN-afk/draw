@@ -10,18 +10,51 @@ export const registerUser = async (
   email: string,
   password: string
 ) => {
-  const existing = await prisma.user.findUnique({ where: { email } });
-  if (existing) throw new AppError("Email already registered", 400);
+  const existingUser = await prisma.user.findUnique({ where: { email } });
 
-  const hashed = await hashPassword(password);
   const otp = generateOTP();
   const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+  const now = new Date();
+
+  if (existingUser && existingUser.isVerified) {
+    throw new AppError("User already registered. Please login.", 400);
+  }
+
+  if (existingUser && !existingUser.isVerified) {
+    const now = new Date();
+
+    const diffInSeconds =
+      (now.getTime() - new Date(existingUser.otpSentAt || 0).getTime()) / 1000;
+
+    if (diffInSeconds < 60) {
+      throw new AppError("Please wait before requesting a new OTP.", 429);
+    }
+
+    await prisma.user.update({
+      where: { email },
+      data: { otp, otpExpires },
+    });
+
+    await sendEmail(email, "Your new OTP Code", `Your new OTP is ${otp}`);
+
+    return { message: "New OTP sent to your email" };
+  }
+
+  const hashedPassword = await hashPassword(password);
 
   await prisma.user.create({
-    data: { email, password: hashed, name, otp, otpExpires },
+    data: {
+      name,
+      email,
+      password: hashedPassword,
+      otp,
+      otpExpires,
+    },
   });
 
   await sendEmail(email, "Verify your email", `Your OTP is ${otp}`);
+
+  return { message: "User registered. Please verify your email." };
 };
 
 export const verifyUserOTP = async (email: string, otp: string) => {
@@ -57,4 +90,35 @@ export const loginUser = async (email: string, password: string) => {
 
   const token = generateToken(user.id);
   return token;
+};
+
+export const resendOTPService = async (email: string) => {
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  if (!user) throw new AppError("User not found", 404);
+
+  if (user.isVerified)
+    throw new AppError("User already verified. Please login.", 400);
+
+  const now = new Date();
+
+  const diffInSeconds =
+    (now.getTime() - new Date(user.otpSentAt || 0).getTime()) / 1000;
+
+  if (diffInSeconds < 60) {
+    throw new AppError("Please wait before requesting a new OTP.", 429);
+  }
+
+  const otp = generateOTP();
+  const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+  await prisma.user.update({ where: { email }, data: { otp, otpExpires } });
+
+  await sendEmail(email, "Your OTP code", `Your new OTP is:${otp}`);
+
+  return { message: "OTP resent to your mail." };
+};
+
+export const logoutUser = async () => {
+  return { message: "Logged out successfully" };
 };

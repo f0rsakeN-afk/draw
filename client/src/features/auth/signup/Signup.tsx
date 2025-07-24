@@ -51,12 +51,12 @@ const Signup: React.FC = () => {
               <Input
                 id="name"
                 type="text"
-                {...register("username")}
+                {...register("name")}
                 placeholder="Naresh"
               />
-              {errors.username && (
+              {errors.name && (
                 <p className="text-sm text-red-500 mt-1">
-                  {errors.username.message}
+                  {errors.name.message}
                 </p>
               )}
             </Wrapper>

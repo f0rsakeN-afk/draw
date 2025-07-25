@@ -6,9 +6,9 @@ import Badges from "@/features/home/Badges";
 
 const Layout: React.FC = () => {
   return (
-    <div >
+    <div>
       <Header />
-      <Badges/>
+      {/*  <Badges/> */}
       <main className="">
         <Outlet />
       </main>

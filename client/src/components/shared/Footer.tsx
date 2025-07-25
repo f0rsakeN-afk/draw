@@ -1,111 +1,159 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { Github, Twitter, Youtube } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Github, Twitter, Youtube, Instagram, Facebook, Linkedin, Mail, ArrowUp } from "lucide-react";
 import { LogoImage } from "@/utils/ImageExports";
+import { cn } from "@/lib/utils";
 
 const Footer: React.FC = () => {
+  const location = useLocation();
+  const currentYear = new Date().getFullYear();
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const footerLinks = [
+    {
+      title: 'Company',
+      links: [
+        { name: 'About', to: '/about' },
+        { name: 'Careers', to: '/careers' },
+        { name: 'Blog', to: '/blog' },
+        { name: 'Press', to: '/press' },
+      ],
+    },
+    {
+      title: 'Support',
+      links: [
+        { name: 'Help Center', to: '/help' },
+        { name: 'Contact Us', to: '/contact' },
+        { name: 'Privacy Policy', to: '/privacy' },
+        { name: 'Terms of Service', to: '/terms' },
+      ],
+    },
+    {
+      title: 'Features',
+      links: [
+        { name: 'Upload', to: '/upload' },
+        { name: 'Channels', to: '/channels' },
+        { name: 'Trending', to: '/trending' },
+        { name: 'Live', to: '/live' },
+      ],
+    },
+  ];
+
+  const socialLinks = [
+    { icon: <Github className="h-4 w-4" />, href: 'https://github.com', label: 'GitHub' },
+    { icon: <Twitter className="h-4 w-4" />, href: 'https://twitter.com', label: 'Twitter' },
+    { icon: <Youtube className="h-4 w-4" />, href: 'https://youtube.com', label: 'YouTube' },
+    { icon: <Instagram className="h-4 w-4" />, href: 'https://instagram.com', label: 'Instagram' },
+    { icon: <Facebook className="h-4 w-4" />, href: 'https://facebook.com', label: 'Facebook' },
+    { icon: <Linkedin className="h-4 w-4" />, href: 'https://linkedin.com', label: 'LinkedIn' },
+  ];
+
   return (
-    <footer className="w-full px-4 border-t bg-background text-muted-foreground">
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 py-10 text-sm">
-        <div className="space-y-2">
-          <img src={LogoImage} alt="logo image" className="h-20 dark:invert" />
+    <footer className="w-full border-t bg-background/50 backdrop-blur-sm">
+      <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-12">
+          {/* Brand and description */}
+          <div className="lg:col-span-4 space-y-4">
+            <div className="flex items-center space-x-2">
+              <img 
+                src={LogoImage} 
+                alt="Vizion Logo" 
+                className="h-12 w-auto dark:invert"
+                loading="lazy"
+              />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Discover, watch, and share your favorite videos. Join our community of creators and viewers from around the world.
+            </p>
+            
+            {/* Social Links */}
+            <div className="flex items-center space-x-4 pt-2">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label={social.label}
+                >
+                  {social.icon}
+                </a>
+              ))}
+            </div>
+          </div>
 
-          <p className="text-xs leading-relaxed">
-            Stream the world’s content. Discover, enjoy, and create.
+          {/* Footer Links */}
+          {footerLinks.map((section) => (
+            <div key={section.title} className="lg:col-span-2 space-y-4">
+              <h4 className="text-sm font-semibold text-foreground">{section.title}</h4>
+              <ul className="space-y-2">
+                {section.links.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      to={link.to}
+                      className={cn(
+                        "text-sm text-muted-foreground hover:text-foreground transition-colors",
+                        location.pathname === link.to ? "text-foreground font-medium" : ""
+                      )}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {/* Newsletter */}
+          <div className="lg:col-span-4 space-y-4">
+            <h4 className="text-sm font-semibold text-foreground">Stay Updated</h4>
+            <p className="text-sm text-muted-foreground">
+              Subscribe to our newsletter for the latest updates and features.
+            </p>
+            <form className="flex space-x-2">
+              <Input
+                type="email"
+                placeholder="Your email address"
+                className="flex-1 bg-background"
+              />
+              <Button type="submit" size="sm" className="shrink-0">
+                <Mail className="h-4 w-4 mr-2" />
+                Subscribe
+              </Button>
+            </form>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <p className="text-sm text-muted-foreground">
+            © {currentYear} Vizion, Inc. All rights reserved.
           </p>
-        </div>
-
-        <div className="space-y-2">
-          <h4 className=" text-foreground font-semibold">Company</h4>
-          <ul className="space-y-1">
-            <li>
-              <Link to="/about" className="hover:underline">
-                About
-              </Link>
-            </li>
-            <li>
-              <Link to="/careers" className="hover:underline">
-                Careers
-              </Link>
-            </li>
-            <li>
-              <Link to="/blog" className="hover:underline">
-                Blog
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div className="space-y-2">
-          <h4 className="font-semibold text-foreground">Support</h4>
-          <ul className="space-y-1">
-            <li>
-              <Link to="/help" className="hover:underline">
-                Help Center
-              </Link>
-            </li>
-            <li>
-              <Link to="/contact" className="hover:underline">
-                Contact
-              </Link>
-            </li>
-            <li>
-              <Link to="/feedback" className="hover:underline">
-                Send Feedback
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div className="space-y-4">
-          <div>
-            <h4 className="font-semibold text-foreground">Legal</h4>
-            <ul className="space-y-1 mt-2">
-              <li>
-                <Link to="/privacy" className="hover:underline">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link to="/terms" className="hover:underline">
-                  Terms of Service
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="flex gap-4 mt-4">
-            <a
-              href="https://youtube.com"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-foreground"
+          
+          <div className="flex items-center space-x-6">
+            <Link to="/privacy" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Privacy Policy
+            </Link>
+            <Link to="/terms" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Terms of Service
+            </Link>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={scrollToTop}
+              className="text-muted-foreground hover:text-foreground"
+              aria-label="Back to top"
             >
-              <Youtube className="h-5 w-5" />
-            </a>
-            <a
-              href="https://twitter.com"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-foreground"
-            >
-              <Twitter className="h-5 w-5" />
-            </a>
-            <a
-              href="https://github.com/f0rsakeN-afk"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-foreground"
-            >
-              <Github className="h-5 w-5" />
-            </a>
+              <ArrowUp className="h-4 w-4" />
+            </Button>
           </div>
         </div>
-      </div>
-
-      <div className="border-t py-4 text-center text-xs">
-        &copy; {new Date().getFullYear()}{" "}
-        <span className="text-[#2a10ff] dark:invert font-semibold">Vizion</span>
-        . All rights reserved.
       </div>
     </footer>
   );

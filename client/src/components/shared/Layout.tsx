@@ -1,18 +1,40 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-import Header from "../header/Header";
-import Footer from "./Footer";
-import Badges from "@/features/home/Badges";
+import React, { useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
+import Header from "@/components/header/Header";
+import Footer from "@/components/shared/Footer";
+import ScrollToTop from "@/components/shared/ScrollToTop";
+import { cn } from "@/lib/utils";
 
-const Layout: React.FC = () => {
+interface LayoutProps {
+  className?: string;
+  children?: React.ReactNode;
+  hideHeader?: boolean;
+  hideFooter?: boolean;
+}
+
+const Layout: React.FC<LayoutProps> = ({
+  className,
+  children,
+  hideHeader = false,
+  hideFooter = false,
+}) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
-    <div>
-      <Header />
-      {/*  <Badges/> */}
-      <main className="">
-        <Outlet />
+    <div className={cn("flex flex-col min-h-screen bg-background", className)}>
+      {!hideHeader && <Header />}
+
+      <main className="flex-1 w-full container mx-auto px-4">
+        {children || <Outlet />}
       </main>
-      <Footer />
+
+      {!hideFooter && <Footer />}
+
+      <ScrollToTop />
     </div>
   );
 };

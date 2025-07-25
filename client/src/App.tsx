@@ -15,7 +15,6 @@ const ResetPassword = lazy(
 const VerifyEmail = lazy(
   () => import("./features/auth/emailVerification/VerifyEmail")
 );
-const VideoPlay = lazy(() => import("./features/home/VideoPlay"));
 const Video = lazy(() => import("./features/video/index"));
 
 const App = () => {
@@ -33,7 +32,6 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
-          <Route path="/video/1" element={<VideoPlay />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>

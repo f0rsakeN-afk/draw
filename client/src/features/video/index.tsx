@@ -86,7 +86,7 @@ export default function VideoPage() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-8 gap-4 px-4 py-3">
+    <div className="grid grid-cols-1 lg:grid-cols-8 gap-4 px-2 py-3">
       <div className="lg:col-span-6 space-y-3">
         <div className="relative w-full aspect-video bg-black rounded-[5px] overflow-hidden">
           <video

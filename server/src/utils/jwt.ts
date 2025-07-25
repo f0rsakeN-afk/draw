@@ -3,6 +3,12 @@ import jwt from "jsonwebtoken";
 const SECRET = process.env.JWT_SECRET;
 const EXPIRES = process.env.JWT_EXPIRES;
 
+interface DecodedToken {
+  id: string;
+  iat: number;
+  exp: number;
+}
+
 if (!SECRET || !EXPIRES) {
   throw new Error("No JWT secret specified!!");
 }
@@ -15,5 +21,5 @@ export const generateToken = (userId: string) => {
 };
 
 export const verifyToken = (token: string) => {
-  return jwt.verify(token, JWT_SECRET);
+  return jwt.verify(token, JWT_SECRET) as DecodedToken;
 };

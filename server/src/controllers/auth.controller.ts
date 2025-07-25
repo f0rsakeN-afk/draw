@@ -58,3 +58,43 @@ export const logout = catchAsync(async (req: Request, res: Response) => {
     ...result,
   });
 });
+
+export const forgotPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email } = req.body;
+    const result = await AuthService.forgotPasswordService(email);
+    res.status(200).json(result);
+  }
+);
+
+export const resetPassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, newPassword, token } = req.body;
+    const result = AuthService.resetPasswordService(email, token, newPassword);
+    res.status(200).json(result);
+  }
+);
+
+export const updatePassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { oldPassword, newPassword } = req.body;
+    const userId = req.user.id;
+    const result = await AuthService.updatePasswordService(
+      userId,
+      oldPassword,
+      newPassword
+    );
+    res.status(200).json(result);
+  }
+);
+
+export const getMe = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { password, passwordResetToken, passwordResetTokenExpires, otp, otpExpires, otpSentAt, ...userWithoutSensitiveData } = req.user;
+    
+    res.status(200).json({
+      success: true,
+      user: userWithoutSensitiveData,
+    });
+  }
+);

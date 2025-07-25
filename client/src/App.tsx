@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Loader from "./components/shared/Loader";
 import Layout from "./components/shared/Layout";
 
+
 const PageNotFound = lazy(() => import("./features/pagenotfound/index"));
 const Home = lazy(() => import("./features/home/index"));
 const Login = lazy(() => import("./features/auth/login/Login"));
@@ -17,7 +18,7 @@ const ResetPassword = lazy(
 const VerifyEmail = lazy(
   () => import("./features/auth/emailVerification/VerifyEmail")
 );
-
+const  VideoPlay =lazy(()=>import("./features/home/VideoPlay"))
 const App = () => {
   return (
     <Suspense fallback={<Loader />}>
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
+          <Route path="/video/1" element={<VideoPlay/>}/>
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>

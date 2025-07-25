@@ -19,6 +19,20 @@ enum LikeType {
   DISLIKE
 }
 
+// For search functionality
+enum SearchType {
+  VIDEO
+  CHANNEL
+  PLAYLIST
+}
+
+// Video visibility status
+enum VideoStatus {
+  PUBLIC
+  UNLISTED
+  PRIVATE
+}
+
 model User {
   id                        String         @id @default(uuid())
   name                      String
@@ -53,32 +67,68 @@ model Subscription {
 }
 
 model Video {
-  id           String   @id @default(cuid())
-  title        String
-  description  String
-  videoUrl     String
-  thumbnailUrl String
-  views        Int      @default(0)
-  user         User     @relation(fields: [userId], references: [id])
-  userId       String
-  category     Category @relation(fields: [categoryId], references: [id])
-  categoryId   String
-
-  createdAt  DateTime         @default(now())
-  watchLater WatchLater[]
-  playlists  PlayListVideos[]
-  comments   Comment[]
-  likes      VideoLike[]
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  url         String
+  thumbnail   String?     // Thumbnail URL
+  duration    Int?        // Video duration in seconds
+  views       Int         @default(0)
+  isPublished Boolean     @default(false)
+  isFeatured  Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  // Relations
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  category    Category?   @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  
+  // Related data
+  comments    Comment[]
+  likes       VideoLike[]
+  playlists   PlayListVideos[]
+  watchLater  WatchLater[]
+  
+  // Indexes for better query performance
+  @@index([userId])
+  @@index([categoryId])
+  @@index([isPublished])
 }
 
 model Comment {
   id        String   @id @default(cuid())
   content   String
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  updatedAt DateTime @updatedAt
+  
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  video   Video  @relation(fields: [videoId], references: [id])
+  videoId String
+  
+  // For nested comments
+  parentId   String?  @default("")  // Empty string instead of null
+  parent     Comment? @relation("CommentReplies", fields: [parentId], references: [id])
+  replies    Comment[] @relation("CommentReplies")
+  
+  // Comment likes
+  likes     CommentLike[]
+  
+  @@index([videoId])
+  @@index([userId])
+  @@index([parentId])
+}
+
+model CommentLike {
+  id        String   @id @default(cuid())
   userId    String
-  video     Video    @relation(fields: [videoId], references: [id])
-  videoId   String
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  commentId String
+  type      LikeType @default(LIKE)
+  
+  @@unique([userId, commentId])
 }
 
 model VideoLike {
@@ -105,28 +155,33 @@ model WatchLater {
   userId    String
   video     Video    @relation(fields: [videoId], references: [id])
   videoId   String
-  createdAt DateTime @default(now())
-
-  @@unique([userId, videoId])
 }
 
 model PlayList {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
+  id          String           @id @default(cuid())
+  name        String
+  description String?
+  isPublic    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 
-  user   User             @relation(fields: [userId], references: [id])
-  userId String
-  videos PlayListVideos[]
+  user        User             @relation(fields: [userId], references: [id])
+  userId      String
+  videos      PlayListVideos[]
+  
+  @@index([userId])
 }
 
 model PlayListVideos {
   id         String   @id @default(cuid())
   playlist   PlayList @relation(fields: [playlistId], references: [id])
   playlistId String
-
-  video   Video  @relation(fields: [videoId], references: [id])
-  videoId String
+  video      Video    @relation(fields: [videoId], references: [id])
+  videoId    String
+  addedAt    DateTime @default(now())
+  position   Int      @default(0)
 
   @@unique([playlistId, videoId])
+  @@index([playlistId])
+  @@index([videoId])
 }

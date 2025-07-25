@@ -5,7 +5,7 @@ import { LogoImage } from "@/utils/ImageExports";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="w-full border-t bg-background text-muted-foreground">
+    <footer className="w-full px-4 border-t bg-background text-muted-foreground">
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 py-10 text-sm">
         <div className="space-y-2">
           <img src={LogoImage} alt="logo image" className="h-20 dark:invert" />

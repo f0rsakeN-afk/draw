@@ -2,12 +2,14 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Header from "../header/Header";
 import Footer from "./Footer";
+import Badges from "@/features/home/Badges";
 
 const Layout: React.FC = () => {
   return (
-    <div className="min-h-dvh flex flex-col">
+    <div >
       <Header />
-      <main className="flex-1 grid grid-cols-12 ">
+      <Badges/>
+      <main className="">
         <Outlet />
       </main>
       <Footer />

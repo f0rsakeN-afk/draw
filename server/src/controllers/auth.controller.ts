@@ -90,9 +90,11 @@ export const updatePassword = catchAsync(
 
 export const getMe = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const { password, passwordResetToken, passwordResetTokenExpires, otp, otpExpires, otpSentAt, ...userWithoutSensitiveData } = req.user;
+    
     res.status(200).json({
       success: true,
-      user: req.user,
+      user: userWithoutSensitiveData,
     });
   }
 );

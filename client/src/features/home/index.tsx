@@ -4,8 +4,6 @@ import Video from "./VideoCard";
 import { Badge } from "@/components/ui/badge";
 
 const Home: React.FC = () => {
-
-
   const categories = [
     "All",
     "Gaming",
@@ -21,7 +19,9 @@ const Home: React.FC = () => {
       {/* Categories */}
       <div className="flex space-x-2 overflow-x-auto pb-4 ">
         {categories.map((category) => (
-          <Badge key={category} variant={"secondary"}>{category}</Badge>
+          <Badge key={category} variant={"secondary"}>
+            {category}
+          </Badge>
         ))}
       </div>
 

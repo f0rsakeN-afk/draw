@@ -16,6 +16,8 @@ const VerifyEmail = lazy(
   () => import("./features/auth/emailVerification/VerifyEmail")
 );
 const Video = lazy(() => import("./features/video/index"));
+const WatchLater=lazy(()=>import("./features/watchlater/index"))
+const Playlist=lazy(()=>import("./features/playlist/index"))
 
 const App = () => {
   return (
@@ -25,7 +27,9 @@ const App = () => {
           <Route element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="/video" element={<Video />} />
-          </Route>
+            <Route path="/watch-later" element={<WatchLater />} />
+            <Route path="/playlist" element={<Playlist />} />
+                        </Route>
 
           <Route path="/signup" element={<Signup />} />
           <Route path="/verifyemail" element={<VerifyEmail />} />

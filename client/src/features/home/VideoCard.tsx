@@ -55,7 +55,7 @@ const VideoCard = ({ video }: { video: Video }) => {
 
           {/* Video Details */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-sm font-medium line-clamp-2 leading-tight mb-1 group-hover:text-primary transition-colors">
+            <h3 className="text-sm font-semibold line-clamp-2 leading-tight mb-1 group-hover:text-primary transition-colors">
               {video.title}
             </h3>
             <p className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer mb-1">

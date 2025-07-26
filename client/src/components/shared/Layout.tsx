@@ -25,10 +25,10 @@ const Layout: React.FC<LayoutProps> = ({
   }, [location.pathname]);
 
   return (
-    <div className={cn("flex flex-col min-h-screen bg-background", className)}>
+    <div className={cn("flex flex-col min-h-screen bg-background font-inter", className)}>
       {!hideHeader && <Header />}
 
-      <main className="flex-1 w-full container mx-auto px-4">
+      <main className="flex-1 w-full container mx-auto px-2">
         {children || <Outlet />}
       </main>
 
